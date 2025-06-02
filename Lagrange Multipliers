@@ -1,0 +1,40 @@
+import sympy as sp
+
+# Define variables
+x, y, z, lamda = sp.symbols('x y z lamda')
+
+# Objective function: f(x, y, z)
+f = (x - 3)**2 + (y - 4)**2 + (z - 12)**2
+
+# Constraint: x² + y² + z² = 1
+f1 = x**2 + y**2 + z**2 - 1
+
+# Lagrangian
+L = f + lamda * f1
+
+# Compute partial derivatives
+Lx = sp.diff(L, x)
+Ly = sp.diff(L, y)
+Lz = sp.diff(L, z)
+
+# Set up the system of equations
+eq1 = sp.Eq(Lx, 0)
+eq2 = sp.Eq(Ly, 0)
+eq3 = sp.Eq(Lz, 0)
+eq4 = sp.Eq(f1, 0)
+
+# Solve the system
+solutions = sp.solve([eq1, eq2, eq3, eq4], (x, y, z, lamda), dict=True)
+
+# Evaluate the function f at both critical points
+s1, s2 = solutions[0], solutions[1]
+fs1 = f.subs({x: s1[x], y: s1[y], z: s1[z]})
+fs2 = f.subs({x: s2[x], y: s2[y], z: s2[z]})
+
+# Determine and display max and min
+if fs1 > fs2:
+    print(f"The maximum value is achieved at ({s1[x]}, {s1[y]}, {s1[z]}) is {fs1}")
+    print(f"The minimum value is achieved at ({s2[x]}, {s2[y]}, {s2[z]}) is {fs2}")
+else:
+    print(f"The maximum value is achieved at ({s2[x]}, {s2[y]}, {s2[z]}) is {fs2}")
+    print(f"The minimum value is achieved at ({s1[x]}, {s1[y]}, {s1[z]}) is {fs1}")
